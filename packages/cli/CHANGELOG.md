@@ -1,5 +1,17 @@
 # mastra
 
+## 1.12.3-alpha.4
+
+### Patch Changes
+
+- Fixed analytics user tracking to use a private persistent ID instead of the device hostname, so unique user counts are not merged across machines with common names. ([#17695](https://github.com/mastra-ai/mastra/pull/17695))
+
+- Updated Mastra Studio font bundle. Studio now uses Inter for both display and body text, shipped as a 352KB variable `.woff2` (down from the 862KB Inter TTF). Code now uses Commit Mono (regular + bold `.woff2`) instead of Geist Mono. The legacy TasaExplorer display font has been removed. All bundled fonts are SIL OFL licensed. All faces use `font-display: swap`. Net Studio font payload: ~948KB → ~489KB. ([#16265](https://github.com/mastra-ai/mastra/pull/16265))
+
+- Updated dependencies [[`8377e5a`](https://github.com/mastra-ai/mastra/commit/8377e5a6c2f232977b25a4e64dda99df9070ca6b), [`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/deployer@1.42.0-alpha.4
+  - @mastra/core@1.42.0-alpha.4
+
 ## 1.12.3-alpha.3
 
 ### Patch Changes

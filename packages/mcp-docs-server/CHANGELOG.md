@@ -1,5 +1,14 @@
 # @mastra/mcp-docs-server
 
+## 1.1.46-alpha.4
+
+### Patch Changes
+
+- Fixed the MCP docs server package root export so importing @mastra/mcp-docs-server loads a published runtime file. Fixes #17700. ([#17709](https://github.com/mastra-ai/mastra/pull/17709))
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+
 ## 1.1.46-alpha.3
 
 ### Patch Changes

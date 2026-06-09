@@ -1,5 +1,39 @@
 # @mastra/openai
 
+## 0.1.0-alpha.2
+
+### Minor Changes
+
+- Added structured output support for Claude and OpenAI SDK agents using their provider-native structured output APIs. Cursor SDK agent calls now fail clearly when structuredOutput is requested because the Cursor TypeScript SDK does not expose a schema-constrained output API. SDK agents now implement provider-native resume through Mastra's existing resumeGenerate/resumeStream methods by accepting provider-specific resumeData with a message payload. Cursor SDK agent options now use the same clear source split as OpenAI: pass either a pre-created agent or SDK options for wrapper-created agents. ([#17580](https://github.com/mastra-ai/mastra/pull/17580))
+
+  Example:
+
+  ```ts
+  await claudeAgent.resumeGenerate({
+    message: 'Continue the task.',
+    sessionId: 'claude-session-id',
+  });
+
+  await openAIAgent.resumeStream({
+    message: 'Continue the task.',
+    previousResponseId: 'resp_123',
+  });
+
+  const result = await openAIAgent.generate('Return the answer as JSON.', {
+    structuredOutput: {
+      schema: z.object({ answer: z.string() }),
+    },
+  });
+  // result.object has shape { answer: string }
+  ```
+
+  Claude and OpenAI SDK agents support `structuredOutput` through their native SDK APIs. `CursorSDKAgent` throws a clear error when `structuredOutput` is requested because the Cursor TypeScript SDK does not expose schema-constrained output.
+
+### Patch Changes
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+
 ## 0.1.0-alpha.1
 
 ### Minor Changes

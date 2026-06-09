@@ -1,5 +1,29 @@
 # @mastra/pg
 
+## 1.13.0-alpha.1
+
+### Patch Changes
+
+- Fixed `PgVector` ignoring an explicit `ssl` option when the connection string also contained an `sslmode=` (or `ssl=`) query parameter. `node-postgres` re-parses the connection string and overwrote the explicit `ssl` object, causing `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` / "self-signed certificate" errors against self-signed or internal CAs even when verification was meant to be skipped. ([#17650](https://github.com/mastra-ai/mastra/pull/17650))
+
+  `PgVector` now honors an explicit `ssl` option over the connection string, matching the existing `PostgresStore` behavior. Connection-string-only SSL (`?sslmode=require` with no explicit `ssl`) keeps working as before.
+
+  ```ts
+  import { PgVector } from '@mastra/pg';
+
+  // This now connects instead of throwing UNABLE_TO_GET_ISSUER_CERT_LOCALLY
+  const vector = new PgVector({
+    id: 'my-vector',
+    connectionString: 'postgresql://user:pass@host:5432/db?sslmode=require',
+    ssl: { rejectUnauthorized: false },
+  });
+  ```
+
+- Make atomic db updates better ([#16796](https://github.com/mastra-ai/mastra/pull/16796))
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+
 ## 1.13.0-alpha.0
 
 ### Minor Changes

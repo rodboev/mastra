@@ -1,5 +1,35 @@
 # @mastra/evals
 
+## 1.3.0-alpha.0
+
+### Minor Changes
+
+- Added `createRubricScorer`, an LLM-as-judge scorer that grades agent output against a rubric of criteria and returns a binary verdict (1 only when every required criterion is satisfied) with per-criterion feedback. Drop it into `isTaskComplete` to make an agent self-correct until the rubric is met. ([#17724](https://github.com/mastra-ai/mastra/pull/17724))
+
+  ```typescript
+  import { createRubricScorer } from '@mastra/evals/scorers/prebuilt';
+
+  const rubricScorer = createRubricScorer({
+    model: '__GATEWAY_OPENAI_MODEL_MINI__',
+    criteria: [
+      { description: 'The response includes an analysis section' },
+      { description: 'The response includes concrete recommendations' },
+    ],
+  });
+
+  await supervisor.stream('Research AI in education', {
+    maxSteps: 10,
+    isTaskComplete: { scorers: [rubricScorer], strategy: 'all' },
+  });
+  ```
+
+  The rubric accepts a criteria array or a newline-delimited string, supports optional (non-gating) criteria, and can be supplied per run via request context under a `rubric` key.
+
+### Patch Changes
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+
 ## 1.2.4
 
 ### Patch Changes

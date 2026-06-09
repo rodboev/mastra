@@ -1,5 +1,26 @@
 # @mastra/langfuse
 
+## 1.3.5-alpha.1
+
+### Patch Changes
+
+- Added support for custom top-level trace metadata in the Langfuse exporter. Any keys you set under `metadata.langfuse` (other than the reserved `prompt` key) are now forwarded as top-level Langfuse trace metadata, so you can filter and group traces by them. Nested values are serialized with JSON. ([#17689](https://github.com/mastra-ai/mastra/pull/17689))
+
+  ```typescript
+  const tracingOptions = {
+    metadata: {
+      langfuse: {
+        customerId: 'cust_123',
+        tier: 'enterprise',
+      },
+    },
+  };
+  // produces langfuse.trace.metadata.customerId and langfuse.trace.metadata.tier
+  ```
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+
 ## 1.3.5-alpha.0
 
 ### Patch Changes

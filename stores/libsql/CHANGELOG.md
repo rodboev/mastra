@@ -1,5 +1,35 @@
 # @mastra/libsql
 
+## 1.13.0-alpha.0
+
+### Minor Changes
+
+- Added LibSQL storage support for durable harness sessions. ([#17712](https://github.com/mastra-ai/mastra/pull/17712))
+
+  ```ts
+  const storage = new LibSQLStore({ id: 'mastra-storage', url: 'file:./mastra.db' });
+
+  const harness = new Harness({
+    ownerId: 'my-app',
+    agent,
+    memory,
+    storage,
+    modes: [{ id: 'default', defaultModelId: '__GATEWAY_OPENAI_MODEL__' }],
+    defaultModeId: 'default',
+  });
+  ```
+
+### Patch Changes
+
+- Fixed concurrent writes silently disappearing when using LibSQL with a local (`file:`) database. ([#16796](https://github.com/mastra-ai/mastra/pull/16796))
+
+  LibSQL backs a local database with a single connection. When one operation held an interactive write transaction (for example, persisting workflow snapshots) and another operation wrote at the same time (for example, creating a dataset experiment), the second write could be swept into the open transaction and rolled back — so it appeared to succeed but never persisted. This surfaced as concurrent agent/workflow runs losing unrelated records.
+
+  Writes on a LibSQL client are now serialized, so a write issued during an in-flight transaction no longer interleaves with it.
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+
 ## 1.12.1
 
 ### Patch Changes

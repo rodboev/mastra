@@ -1,5 +1,20 @@
 # @mastra/datadog
 
+## 1.2.4-alpha.0
+
+### Patch Changes
+
+- Fixed DatadogBridge score forwarding to Datadog LLM Observability. ([#17540](https://github.com/mastra-ai/mastra/pull/17540))
+
+- Fixed missing model options and tool calls in Datadog LLM Observability spans. ([#17693](https://github.com/mastra-ai/mastra/pull/17693))
+
+  **Forward model request options** — Model call settings (temperature, maxOutputTokens) and provider-specific options (like OpenAI's reasoningEffort) now reach Datadog. Previously they were stripped before export, so they never appeared on the LLM span. They now show up under the span's metadata, alongside the available tools and tool choice.
+
+  **Render tool calls in conversation history** — Tool calls in an LLM's input messages now render correctly in Datadog instead of appearing as empty objects. Previously the raw tool-call shape was passed through unchanged and dropped by Datadog's tracer, losing tool calls from the conversation history. Output tool calls were already handled; input now matches.
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+
 ## 1.2.3
 
 ### Patch Changes

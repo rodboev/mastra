@@ -1,5 +1,21 @@
 # @internal/playground
 
+## 1.12.3-alpha.4
+
+### Patch Changes
+
+- Fixed the Studio Metrics **Latency** card drilldown, which was a silent no-op on all three tabs (Agents, Workflows, Tools). The view-level click guard and the container-level navigation handler both read a `rawTimestamp` field that the hook never produces; the only timestamp on a `LatencyPoint` is `tsMs`. Clicking a chart point now correctly navigates to the Traces page filtered to the 1-hour bucket and the entity type of the active tab. ([#17704](https://github.com/mastra-ai/mastra/pull/17704))
+
+- Refined the agent chat Memory sidebar in Studio. The left Memory panel is now always visible: when the agent has no memory configured it shows an empty state explaining that conversations are only saved as threads when memory is enabled, with a link to the Agent Memory docs, and the Threads/Memory Configuration tabs are hidden until memory is active. Removed the "Memory" title/icon header from the sidebar and the "Agent Memory On/Off" row from the agent Overview metadata. Renamed the "Configuration" tab to "Memory Configuration", widened the sidebar's default width, and tightened the configuration panel's padding for consistent spacing. ([#17667](https://github.com/mastra-ai/mastra/pull/17667))
+
+- Updated Studio to use Mona Sans for display and body text. ([#17707](https://github.com/mastra-ai/mastra/pull/17707))
+
+- Updated dependencies [[`1e9aab5`](https://github.com/mastra-ai/mastra/commit/1e9aab50ff11e6e88fde4d7cbf512c44a9fe8d61), [`318cb8e`](https://github.com/mastra-ai/mastra/commit/318cb8edb1855313e4b9a0b4d30b11fc8b64e471), [`3abfa15`](https://github.com/mastra-ai/mastra/commit/3abfa158881ad3b187f69392cc64fe3a5aeed5c3), [`493a328`](https://github.com/mastra-ai/mastra/commit/493a328f4346a1deeb9f1e2e44c8f2a3a4d7591b), [`e0809c6`](https://github.com/mastra-ai/mastra/commit/e0809c69faec2715163f446264e123776258d09f), [`3761b5f`](https://github.com/mastra-ai/mastra/commit/3761b5f6a031f2ae43a886e870d0fbc76d2b7b59), [`36df947`](https://github.com/mastra-ai/mastra/commit/36df947de2603131fd24652db61af7799a790827), [`2e6941a`](https://github.com/mastra-ai/mastra/commit/2e6941a39915f00aef0d0bafcbdc652e74281661), [`1bd3830`](https://github.com/mastra-ai/mastra/commit/1bd38306e0d4d36868420b4bdd4db9876811545a), [`9360036`](https://github.com/mastra-ai/mastra/commit/9360036b21a47badd530ad38ee76fd01c07e3ba9), [`2a96528`](https://github.com/mastra-ai/mastra/commit/2a9652848dfa3c5a2426f952e9d93554c26fd90f), [`61f5491`](https://github.com/mastra-ai/mastra/commit/61f54912e6453cc706bb5d7df9f6c7aad78d428f), [`61f5491`](https://github.com/mastra-ai/mastra/commit/61f54912e6453cc706bb5d7df9f6c7aad78d428f), [`63e3fe1`](https://github.com/mastra-ai/mastra/commit/63e3fe13cc1ea96f91d7c68aea92f400faf9e4da), [`8c68372`](https://github.com/mastra-ai/mastra/commit/8c68372e85fe0b066ec12c58bd29ffb93e54c552)]:
+  - @mastra/core@1.42.0-alpha.4
+  - @mastra/playground-ui@33.0.0-alpha.4
+  - @mastra/react@0.6.0-alpha.4
+  - @mastra/client-js@1.24.0-alpha.4
+
 ## 1.12.3-alpha.3
 
 ### Patch Changes

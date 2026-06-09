@@ -1,5 +1,59 @@
 # @mastra/core
 
+## 1.42.0-alpha.4
+
+### Minor Changes
+
+- Enabled persistent storage for durable harness sessions across storage backends. Harness v1 can now resolve its session store from a configured storage adapter. ([#17712](https://github.com/mastra-ai/mastra/pull/17712))
+
+- Add workspace registry cleanup and shutdown destruction. ([#17661](https://github.com/mastra-ai/mastra/pull/17661))
+
+  Mastra now exposes `removeWorkspace(id, { destroy })` for removing runtime workspaces from the registry. When `destroy` is true, the workspace is destroyed before removal and remains registered if destruction fails.
+
+  `mastra.shutdown()` now destroys registered workspaces before closing storage and unregisters only the workspaces that clean up successfully. Workspace tool execution also updates `lastAccessedAt`, so runtime activity is tracked beyond search operations.
+
+  ```ts
+  await mastra.removeWorkspace('workspace-123', { destroy: true }); // destroys, then unregisters
+  await mastra.removeWorkspace('workspace-456'); // unregisters only; caller owns destroy
+  await mastra.shutdown(); // destroys registered workspaces, then closes storage
+  ```
+
+- Added two options to `ToolSearchProcessor` for cheaper, more cache-friendly tool discovery. ([#17691](https://github.com/mastra-ai/mastra/pull/17691))
+
+  **`autoLoad`: one-turn discovery**
+
+  Set `search.autoLoad` so that `search_tools` activates the matching tools immediately, removing the separate `load_tool` round-trip. The model searches once and can call a discovered tool on its next turn instead of searching, loading, then calling. This cuts one model turn (and a full prompt replay) per discovery.
+
+  ```typescript
+  import { ToolSearchProcessor } from '@mastra/core/processors';
+
+  const toolSearch = new ToolSearchProcessor({
+    tools: allTools,
+    search: { topK: 3, autoLoad: true },
+  });
+  ```
+
+  **`storage`: opt-in `'context'` mode**
+
+  Choose where loaded-tool state lives. The default `'in-memory'` keeps the original behavior. The new opt-in `'context'` mode derives loaded tools from the conversation messages, so it is restart-safe, needs no memory configuration, and de-loads a tool once its discovery result is no longer in the messages.
+
+  ```typescript
+  const toolSearch = new ToolSearchProcessor({
+    tools: allTools,
+    storage: 'context',
+  });
+  ```
+
+  Both modes are cache-friendly when loading tools, since loads are append-only and keep the cached prompt prefix stable. The default `'in-memory'` store still shares a single `'default'` entry across anonymous (no thread ID) requests; use `storage: 'context'` to keep anonymous requests isolated and derive loaded tools from the conversation messages.
+
+### Patch Changes
+
+- - Use evented-workflow engine in the internal agentic loop. ([#16796](https://github.com/mastra-ai/mastra/pull/16796))
+  - Fix nested workflow resume with resumeLabel in evented-workflow engine.
+  - Default to an in-memory store when no `storage` is configured on `Mastra`, and warn that it is not durable and a persistent storage adapter should be used in production.
+
+- Update ai-sdk deps ([#17144](https://github.com/mastra-ai/mastra/pull/17144))
+
 ## 1.42.0-alpha.3
 
 ### Minor Changes

@@ -110,3 +110,105 @@ describe('AIV5Adapter — FileUIPart (url-based) through fromModelMessage', () =
     }
   });
 });
+
+describe('AIV5Adapter — Raw base64 string passthrough (string data)', () => {
+  it('handles raw base64 string without adding data: prefix', () => {
+    const base64String = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+    const dbMessage = AIV5Adapter.fromModelMessage({
+      role: 'user',
+      content: [
+        {
+          type: 'image',
+          image: base64String,
+          mediaType: 'image/png',
+        } as any,
+      ],
+    });
+
+    const filePart = dbMessage.content.parts?.find(p => p.type === 'file');
+    expect(filePart).toBeDefined();
+    if (filePart?.type === 'file') {
+      // Raw base64 should be returned as-is, not wrapped
+      expect(filePart.data).toBe(base64String);
+      expect(filePart.mimeType).toBe('image/png');
+    }
+
+    expect(dbMessage.content.experimental_attachments).toEqual([
+      { url: base64String, contentType: 'image/png' },
+    ]);
+  });
+
+  it('handles data: URI string without modification', () => {
+    const dataUri = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQE=';
+    const dbMessage = AIV5Adapter.fromModelMessage({
+      role: 'user',
+      content: [
+        {
+          type: 'image',
+          image: dataUri,
+          mediaType: 'image/jpeg',
+        } as any,
+      ],
+    });
+
+    const filePart = dbMessage.content.parts?.find(p => p.type === 'file');
+    expect(filePart).toBeDefined();
+    if (filePart?.type === 'file') {
+      // data: URI should be returned as-is
+      expect(filePart.data).toBe(dataUri);
+      expect(filePart.mimeType).toBe('image/jpeg');
+    }
+
+    expect(dbMessage.content.experimental_attachments).toEqual([
+      { url: dataUri, contentType: 'image/jpeg' },
+    ]);
+  });
+
+  it('handles HTTP URL string without modification', () => {
+    const httpUrl = 'https://example.com/image.png';
+    const dbMessage = AIV5Adapter.fromModelMessage({
+      role: 'user',
+      content: [
+        {
+          type: 'image',
+          image: httpUrl,
+          mediaType: 'image/png',
+        } as any,
+      ],
+    });
+
+    const filePart = dbMessage.content.parts?.find(p => p.type === 'file');
+    expect(filePart).toBeDefined();
+    if (filePart?.type === 'file') {
+      // HTTP URL should be returned as-is
+      expect(filePart.data).toBe(httpUrl);
+      expect(filePart.mimeType).toBe('image/png');
+    }
+
+    expect(dbMessage.content.experimental_attachments).toEqual([
+      { url: httpUrl, contentType: 'image/png' },
+    ]);
+  });
+
+  it('handles raw base64 in file part', () => {
+    const base64String = 'JVBERi0xLjQK';
+    const dbMessage = AIV5Adapter.fromModelMessage({
+      role: 'user',
+      content: [
+        {
+          type: 'file',
+          data: base64String,
+          mediaType: 'application/pdf',
+        } as any,
+      ],
+    });
+
+    const filePart = dbMessage.content.parts?.find(p => p.type === 'file');
+    expect(filePart).toBeDefined();
+    if (filePart?.type === 'file') {
+      // Raw base64 should be returned as-is
+      expect(filePart.data).toBe(base64String);
+      expect(filePart.mimeType).toBe('application/pdf');
+    }
+  });
+});
